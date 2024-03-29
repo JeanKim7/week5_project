@@ -21,9 +21,23 @@ $$;
 CALL add_customers('Jean', 'Kim', 99.99, 1, 1);
 CALL add_customers('Sarah', 'Swanson', 1000000, 3, 2);
 
-INSERT INTO invoice (price, time_bought, customer_id, salesperson_id)
-VALUES (15000, '1907-03-18 12:00:00', 1, 1),
-(13, '1997-01-01 00:15:00', 2, 2);
+CREATE OR REPLACE PROCEDURE add_invoice (
+	price NUMERIC(9,2),
+	time_bought TIMESTAMP,
+	customer_id INTEGER,
+	salesperson_id INTEGER
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN 
+	INSERT INTO invoice (price, time_bought, customer_id, salesperson_id)
+	VALUES (price, time_bought, customer_id, salesperson_id);
+END;
+$$;
+
+CALL add_invoice(15000, '1907-03-18 12:00:00', 1, 1);
+CALL add_invoice(13, '1997-01-01 00:15:00', 2, 2);
+
 
 INSERT INTO car (model, make, price, color, "year", NEW, invoice_id)
 VALUES ('Fiesta', 'Ford', 15000, 'neon pink', 2013, TRUE, 1),
